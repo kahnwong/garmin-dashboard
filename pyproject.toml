@@ -1,0 +1,19 @@
+[project]
+name = "garmin-dashboard"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Karn Wong", email = "karn@karnwong.me" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "garminconnect>=0.2.26",
+    "garth>=0.5.3",
+    "readchar>=4.2.1",
+    "requests>=2.32.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
