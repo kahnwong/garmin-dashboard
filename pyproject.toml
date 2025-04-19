@@ -10,8 +10,12 @@ requires-python = ">=3.13"
 dependencies = [
     "garminconnect>=0.2.26",
     "garth>=0.5.3",
+    "matplotlib>=3.10.1",
+    "pandas>=2.2.3",
+    "polars>=1.27.1",
     "readchar>=4.2.1",
     "requests>=2.32.3",
+    "streamlit>=1.44.1",
 ]
 
 [build-system]

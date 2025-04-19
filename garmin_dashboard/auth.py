@@ -34,7 +34,7 @@ def get_mfa():
     return input("MFA one-time code: ")
 
 
-def init_api(email, password):
+def init_api(email=email, password=password):
     """Initialize Garmin API with your credentials."""
 
     try:
