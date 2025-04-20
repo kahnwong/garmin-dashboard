@@ -13,10 +13,13 @@ os.makedirs("data/charts", exist_ok=True)
 # set params
 today = datetime.date.today()
 startdate = today - datetime.timedelta(days=7)  # past week
+date_all = [
+    startdate + datetime.timedelta(days=x) for x in range((today - startdate).days + 1)
+]
 
 
-def _plot(name, df):
-    df.plot(kind="bar")
+def _plot(name, kind, df):
+    df.plot(kind=kind)
 
     plt.title(name)
     plt.xticks(rotation=45)
@@ -26,17 +29,36 @@ def _plot(name, df):
     return plt
 
 
-def chart_body_battery():
+def body_battery():
     df = pd.DataFrame(garmin.get_body_battery(startdate.isoformat(), today.isoformat()))
     df = df[["date", "charged", "drained"]].set_index("date")
-    print(df)
 
-    return _plot("Body Battery", df)
+    return _plot(name="Body Battery", kind="bar", df=df)
 
 
-# # resting heart rate
-# garmin.get_rhr_day(today.isoformat())
-#
+def resting_heart_rate():
+    r = []
+    for date in date_all[-6:]:
+        r.append(garmin.get_rhr_day(date.isoformat()))
+
+    r_filtered = []
+    for i in r:
+        try:
+            d = {
+                "statisticsStartDate": i["statisticsStartDate"],
+                "restingHeartRate": i["allMetrics"]["metricsMap"][
+                    "WELLNESS_RESTING_HEART_RATE"
+                ][0]["value"],
+            }
+            r_filtered.append(d)
+        except KeyError:
+            pass
+
+    df = pd.DataFrame(r_filtered).set_index("statisticsStartDate")
+
+    return _plot(name="Resting Heart Rate", kind="line", df=df)
+
+
 # # sleep
 # api.get_sleep_data(today.isoformat()),
 #
