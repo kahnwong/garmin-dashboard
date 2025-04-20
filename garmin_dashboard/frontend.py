@@ -12,5 +12,5 @@ st.subheader("Sleep")
 st.pyplot(charts.sleep())
 
 
-st.subheader("Steps")
+st.subheader("Body Battery")
 st.pyplot(charts.body_battery())
