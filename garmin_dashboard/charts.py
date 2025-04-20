@@ -45,7 +45,7 @@ def resting_heart_rate():
     for i in r:
         try:
             d = {
-                "statisticsStartDate": i["statisticsStartDate"],
+                "date": i["statisticsStartDate"],
                 "restingHeartRate": i["allMetrics"]["metricsMap"][
                     "WELLNESS_RESTING_HEART_RATE"
                 ][0]["value"],
@@ -54,7 +54,7 @@ def resting_heart_rate():
         except KeyError:
             pass
 
-    df = pd.DataFrame(r_filtered).set_index("statisticsStartDate")
+    df = pd.DataFrame(r_filtered).set_index("date")
 
     return _plot(name="Resting Heart Rate", kind="line", df=df)
 
@@ -68,7 +68,7 @@ def sleep():
     for i in r:
         try:
             d = {
-                "calendarDate": i["dailySleepDTO"]["calendarDate"],
+                "date": i["dailySleepDTO"]["calendarDate"],
                 "deep": i["dailySleepDTO"]["deepSleepSeconds"],
                 "light": i["dailySleepDTO"]["lightSleepSeconds"],
                 "rem": i["dailySleepDTO"]["remSleepSeconds"],
@@ -78,7 +78,7 @@ def sleep():
         except KeyError:
             pass
 
-    df = pd.DataFrame(r_filtered).set_index("calendarDate")
+    df = pd.DataFrame(r_filtered).set_index("date")
 
     return _plot(name="Sleep", kind="area", df=df)
 
@@ -92,7 +92,7 @@ def stress():
     for i in r:
         try:
             d = {
-                "calendarDate": i["calendarDate"],
+                "date": i["calendarDate"],
                 "max": i["maxStressLevel"],
                 "avg": i["avgStressLevel"],
             }
@@ -100,6 +100,6 @@ def stress():
         except KeyError:
             pass
 
-    df = pd.DataFrame(r_filtered).set_index("calendarDate")
+    df = pd.DataFrame(r_filtered).set_index("date")
 
     return _plot(name="Stress", kind="bar", df=df)
