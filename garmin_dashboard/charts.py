@@ -38,7 +38,7 @@ def body_battery():
 
 def resting_heart_rate():
     r = []
-    for date in date_all[-6:]:
+    for date in date_all:
         r.append(garmin.get_rhr_day(date.isoformat()))
 
     r_filtered = []
@@ -59,8 +59,29 @@ def resting_heart_rate():
     return _plot(name="Resting Heart Rate", kind="line", df=df)
 
 
-# # sleep
-# api.get_sleep_data(today.isoformat()),
-#
+def sleep():
+    r = []
+    for date in date_all:
+        r.append(garmin.get_sleep_data(date.isoformat()))
+
+    r_filtered = []
+    for i in r:
+        try:
+            d = {
+                "calendarDate": i["dailySleepDTO"]["calendarDate"],
+                "deep": i["dailySleepDTO"]["deepSleepSeconds"],
+                "light": i["dailySleepDTO"]["lightSleepSeconds"],
+                "rem": i["dailySleepDTO"]["remSleepSeconds"],
+                "awake": i["dailySleepDTO"]["awakeSleepSeconds"],
+            }
+            r_filtered.append(d)
+        except KeyError:
+            pass
+
+    df = pd.DataFrame(r_filtered).set_index("calendarDate")
+
+    return _plot(name="Sleep", kind="area", df=df)
+
+
 # # stress
 # api.get_stress_data(today.isoformat()),
