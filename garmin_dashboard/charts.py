@@ -83,5 +83,23 @@ def sleep():
     return _plot(name="Sleep", kind="area", df=df)
 
 
-# # stress
-# api.get_stress_data(today.isoformat()),
+def stress():
+    r = []
+    for date in date_all[-2:]:
+        r.append(garmin.get_stress_data(date.isoformat()))
+
+    r_filtered = []
+    for i in r:
+        try:
+            d = {
+                "calendarDate": i["calendarDate"],
+                "max": i["maxStressLevel"],
+                "avg": i["avgStressLevel"],
+            }
+            r_filtered.append(d)
+        except KeyError:
+            pass
+
+    df = pd.DataFrame(r_filtered).set_index("calendarDate")
+
+    return _plot(name="Stress", kind="bar", df=df)
