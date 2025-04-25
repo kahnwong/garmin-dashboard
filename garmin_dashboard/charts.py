@@ -85,7 +85,7 @@ def sleep():
 
 def stress():
     r = []
-    for date in date_all[-2:]:
+    for date in date_all:
         r.append(garmin.get_stress_data(date.isoformat()))
 
     r_filtered = []
