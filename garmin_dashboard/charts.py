@@ -2,6 +2,7 @@ import datetime
 import os
 
 import pandas as pd
+import plotly.express as px
 from matplotlib import pyplot as plt
 
 from garmin_dashboard import auth
@@ -12,7 +13,8 @@ os.makedirs("data/charts", exist_ok=True)
 
 # set params
 today = datetime.date.today()
-startdate = today - datetime.timedelta(days=7)  # past week
+# startdate = today - datetime.timedelta(days=7)  # past week
+startdate = today - datetime.timedelta(days=2)  # past week
 date_all = [
     startdate + datetime.timedelta(days=x) for x in range((today - startdate).days + 1)
 ]
@@ -103,3 +105,26 @@ def stress():
     df = pd.DataFrame(r_filtered).set_index("date")
 
     return _plot(name="Stress", kind="bar", df=df)
+
+
+def pulse_ox():
+    r = []
+    for date in date_all:
+        r.append(garmin.get_spo2_data(date.isoformat()))
+
+    r_filtered = []
+    for i in r:
+        try:
+            for chunk in i["spO2SingleValues"]:
+                d = {"time": chunk[0], "spO2": chunk[1]}
+
+                r_filtered.append(d)
+        except TypeError:
+            pass
+
+    df = pd.DataFrame(r_filtered)
+    df["time"] = pd.to_datetime(df["time"], unit="ms").dt.tz_localize("Asia/Bangkok")
+    print(df)
+    fig = px.line(df, x="time", y="spO2")
+
+    return fig

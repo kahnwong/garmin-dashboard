@@ -12,6 +12,7 @@ dependencies = [
     "garth>=0.5.3",
     "matplotlib>=3.10.1",
     "pandas>=2.2.3",
+    "plotly>=6.1.2",
     "polars>=1.27.1",
     "readchar>=4.2.1",
     "requests>=2.32.3",
